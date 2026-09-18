@@ -6,7 +6,8 @@
    ✅ Servis değişiminde saat yeniden hesaplama
    ════════════════════════════════════════════════════════════ */
 
-const API_BASE = 'https://admin-omega-eight-42.vercel.app';
+/* API URL'si Vercel rewrites (vercel.json) üzerinden yönlendiriliyor (CORS bypass) */
+const API_BASE = '';
 
 const SUPABASE_URL = 'https://xdbsuikweiqarwaxrmwf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYnN1aWt3ZWlxYXJ3YXhybXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwNjYxMTAsImV4cCI6MjEwNDY0MjExMH0.J6-MZ-gYXxO2xAhA8GBs63t1-kEM73RjRyesCMYiotA';
