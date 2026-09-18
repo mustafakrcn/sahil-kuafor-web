@@ -1,39 +1,28 @@
-const http = require('http');
+// Using native fetch
 
-const data = JSON.stringify({
-  name: 'Ahmet Yilmaz',
-  phone: '05556667788',
-  date: '2026-10-16',
-  time: '14:00',
-  service: 'Sakal Şekillendirme',
-  notes: 'Test note'
-});
-
-const options = {
-  hostname: 'localhost',
-  port: 3000,
-  path: '/api/web-appointment',
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Content-Length': Buffer.byteLength(data)
+async function test() {
+  try {
+    const res = await fetch('https://admin-omega-eight-42.vercel.app/api/web-appointment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Origin': 'https://barbershop-website-one.vercel.app'
+      },
+      body: JSON.stringify({
+        name: 'Uctan Uca Test',
+        phone: '05551234567',
+        date: '2026-10-10',
+        time: '14:00',
+        service: 'Test'
+      })
+    });
+    
+    console.log("HTTP Status:", res.status);
+    const text = await res.text();
+    console.log("Response:", text);
+  } catch (err) {
+    console.error("Fetch Error:", err);
   }
-};
+}
 
-const req = http.request(options, res => {
-  console.log(`Status: ${res.statusCode}`);
-  let body = '';
-  res.on('data', d => {
-    body += d;
-  });
-  res.on('end', () => {
-    console.log(`Body: ${body}`);
-  });
-});
-
-req.on('error', error => {
-  console.error(error);
-});
-
-req.write(data);
-req.end();
+test();
