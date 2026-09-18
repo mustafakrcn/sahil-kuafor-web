@@ -38,11 +38,20 @@ export default function AdminCalendarScreen() {
       const formattedItems: any = {};
       
       data.forEach((appt) => {
-        const dateKey = format(parseISO(appt.start_at), 'yyyy-MM-dd');
-        if (!formattedItems[dateKey]) {
-          formattedItems[dateKey] = [];
+        try {
+          if (!appt || !appt.start_at) return;
+          const parsed = parseISO(appt.start_at);
+          // Check if date is valid
+          if (isNaN(parsed.getTime())) return;
+          
+          const dateKey = format(parsed, 'yyyy-MM-dd');
+          if (!formattedItems[dateKey]) {
+            formattedItems[dateKey] = [];
+          }
+          formattedItems[dateKey].push(appt);
+        } catch (e) {
+          console.log('Date parsing error', e);
         }
-        formattedItems[dateKey].push(appt);
       });
 
       setItems(formattedItems);
@@ -51,9 +60,20 @@ export default function AdminCalendarScreen() {
   };
 
   const renderItem = (appt: any) => {
-    const start = parseISO(appt.start_at);
+    if (!appt) return <View />;
+    
+    let startStr = 'Bilinmeyen Zaman';
     let statusColor = '#888';
     let statusText = 'Bilinmiyor';
+
+    try {
+      if (appt.start_at) {
+        const parsed = parseISO(appt.start_at);
+        if (!isNaN(parsed.getTime())) {
+          startStr = format(parsed, 'HH:mm');
+        }
+      }
+    } catch(e) {}
 
     if (appt.status === 'pending') { statusColor = '#eab308'; statusText = 'Bekliyor'; }
     if (appt.status === 'confirmed') { statusColor = '#22c55e'; statusText = 'Onaylı'; }
@@ -67,7 +87,7 @@ export default function AdminCalendarScreen() {
         activeOpacity={0.8}
       >
         <View style={styles.cardHeader}>
-          <Text style={styles.timeText}>{format(start, 'HH:mm')}</Text>
+          <Text style={styles.timeText}>{startStr}</Text>
           <Text style={[styles.statusBadge, { color: statusColor, borderColor: statusColor + '40' }]}>
             {statusText}
           </Text>
