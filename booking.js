@@ -294,3 +294,5 @@ function showErr(msg) {
   submitBtn.before(el);
   setTimeout(() => el.remove(), 6000);
 }
+
+// Vercel webhook test - 20260918034414
