@@ -110,6 +110,12 @@ function AdminAppointmentCard({ appt, onUpdate, isPending = false }: { appt: any
         <Text style={styles.phoneText}>{appt.customer?.phone || '-'}</Text>
       </View>
 
+      {appt.notes && (
+        <View style={styles.notesContainer}>
+          <Text style={styles.notesText}>{appt.notes}</Text>
+        </View>
+      )}
+
       {isPending && (
         <View style={styles.actionRow}>
           <TouchableOpacity style={[styles.actionBtn, { backgroundColor: '#ef444420', borderColor: '#ef4444' }]} onPress={() => onUpdate(appt.id, 'cancelled')}>
@@ -209,5 +215,17 @@ const styles = StyleSheet.create({
   actionText: {
     fontWeight: '600',
     fontSize: 14,
+  },
+  notesContainer: {
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.05)',
+  },
+  notesText: {
+    color: '#ccc',
+    fontSize: 13,
+    fontStyle: 'italic',
+    lineHeight: 18,
   }
 });
