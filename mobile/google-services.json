@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "384822565421",
+    "project_id": "salih-erkek-k",
+    "storage_bucket": "salih-erkek-k.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384822565421:android:81e993d20a5e15255e36a4",
+        "android_client_info": {
+          "package_name": "com.sahilkuafor.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuTuFAX5mNjPMySN7AOHQVJJEM8roqU1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

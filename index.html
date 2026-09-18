@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Etiketleri -->
+  <title>Sahil Erkek Kuaförü | Profesyonel Saç & Sakal Bakımı — Körfez, Kocaeli</title>
+  <meta name="description"
+    content="Körfez, Kocaeli'nde profesyonel erkek kuaförü. Saç kesimi, sakal şekillendirme, saç boyama, yüz bakımı ve daha fazlası. Online randevu alın.">
+  <meta name="keywords" content="erkek kuaförü, berber, Körfez, Kocaeli, saç kesimi, sakal tıraşı, saç boyama, randevu">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.sahilkuafor.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Sahil Erkek Kuaförü | Körfez, Kocaeli">
+  <meta property="og:description" content="Profesyonel erkek kuaförü hizmetleri. Online randevu alın.">
+  <meta property="og:type" content="business.business">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:image" content="https://www.sahilkuafor.com/assets/hero.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://www.sahilkuafor.com/">
+
+  <!-- Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💈</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Playfair+Display:wght@700;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link href="style.css" rel="stylesheet" type="text/css" />
+
+  <!-- Supabase CDN (head'de yükleniyor — form submit'ten önce hazır olsun) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+
+<body>
+
+  <!-- ======= NAVBAR ======= -->
+  <header id="navbar">
+    <nav>
+      <a href="#anasayfa" class="logo" id="logo-link">
+        <span class="logo-icon">💈</span>
+        <span class="logo-text">Sahil Erkek Kuaförü</span>
+      </a>
+
+      <!-- Hamburger Butonu (Mobil) -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menüyü aç/kapat" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#anasayfa" class="nav-link">Ana Sayfa</a></li>
+        <li><a href="#hizmetler" class="nav-link">Hizmetler</a></li>
+        <li><a href="#hakkimda" class="nav-link">Hakkımda</a></li>
+        <li><a href="#yorumlar" class="nav-link">Yorumlar</a></li>
+        <li><a href="#randevu" class="nav-link">Randevu Al</a></li>
+        <li><a href="#iletisim" class="nav-link">İletişim</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ======= HERO ======= -->
+  <section id="anasayfa" class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Körfez / Kocaeli</p>
+      <h1 class="hero-title">Stilinizi<br><span class="hero-accent">Bize Bırakın</span></h1>
+      <p class="hero-subtitle">Profesyonel ellerde, kusursuz bir görünüm.</p>
+      <div class="hero-cta">
+        <a href="#randevu" class="btn btn-primary" id="hero-randevu-btn">
+          <i class="fas fa-calendar-check"></i> Randevu Al
+        </a>
+        <a href="#hizmetler" class="btn btn-outline" id="hero-hizmetler-btn">
+          Hizmetlerimiz <i class="fas fa-arrow-down"></i>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">500+</span>
+          <span class="stat-label">Mutlu Müşteri</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">8+</span>
+          <span class="stat-label">Yıl Deneyim</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">4.9★</span>
+          <span class="stat-label">Google Puanı</span>
+        </div>
+      </div>
+    </div>
+    <a href="#hizmetler" class="scroll-indicator" id="scroll-down" aria-label="Aşağı kaydır">
+      <i class="fas fa-chevron-down"></i>
+    </a>
+  </section>
+
+  <!-- ======= HİZMETLER ======= -->
+  <section id="hizmetler" class="services">
+    <div class="section-header">
+      <p class="section-eyebrow">Ne Sunuyoruz?</p>
+      <h2 class="section-title">Hizmetlerimiz</h2>
+      <p class="section-subtitle">Her hizmetimiz uzman ellerle, premium ürünlerle sunulur.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card" id="service-sac-kesim">
+        <div class="service-icon"><i class="fas fa-cut"></i></div>
+        <h3>Saç Kesim & Bakım</h3>
+        <p>Yüz şeklinize özel klasik veya modern kesim teknikleri.</p>
+        <div class="service-price">
+          <span class="price">₺150</span>
+          <span class="price-note">/ seans</span>
+        </div>
+      </div>
+
+      <div class="service-card" id="service-sakal">
+        <div class="service-icon"><i class="fas fa-user-check"></i></div>
+        <h3>Sakal Şekillendirme</h3>
+        <p>Profesyonel ustura ile tam traş veya sakal düzeltme & şekillendirme.</p>
+        <div class="service-price">
+          <span class="price">₺100</span>
+          <span class="price-note">/ seans</span>
+        </div>
+      </div>
+
+      <div class="service-card" id="service-sac-boyama">
+        <div class="service-icon"><i class="fas fa-palette"></i></div>
+        <h3>Saç Boyama</h3>
+        <p>Amonyaksız premium boyalar ile doğal görünümlü renk uygulaması.</p>
+        <div class="service-price">
+          <span class="price">₺250</span>
+          <span class="price-note">/ seans</span>
+        </div>
+      </div>
+
+      <div class="service-card" id="service-yuz-bakimi">
+        <div class="service-icon"><i class="fas fa-spa"></i></div>
+        <h3>Yüz Maskesi & Bakım</h3>
+        <p>Derin temizlik maskesi ile cilt yenileme ve nemlendirme bakımı.</p>
+        <div class="service-price">
+          <span class="price">₺120</span>
+          <span class="price-note">/ seans</span>
+        </div>
+      </div>
+
+      <div class="service-card" id="service-fon">
+        <div class="service-icon"><i class="fas fa-wind"></i></div>
+        <h3>Fön & Şekillendirme</h3>
+        <p>Profesyonel ürünlerle kalıcı saç şekillendirme ve fön servisi.</p>
+        <div class="service-price">
+          <span class="price">₺80</span>
+          <span class="price-note">/ seans</span>
+        </div>
+      </div>
+
+      <div class="service-card" id="service-masaj">
+        <div class="service-icon"><i class="fas fa-hand-sparkles"></i></div>
+        <h3>Profesyonel Masaj</h3>
+        <p>Kafa derisine özel saç büyümesini destekleyen masaj seansı.</p>
+        <div class="service-price">
+          <span class="price">₺90</span>
+          <span class="price-note">/ seans</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======= HAKKIMDA ======= -->
+  <section id="hakkimda" class="team">
+    <div class="section-header">
+      <p class="section-eyebrow">Berberiniz</p>
+      <h2 class="section-title">Hakkımda</h2>
+      <p class="section-subtitle">Stilinizi profesyonel ellere bırakın.</p>
+    </div>
+    <div class="team-grid" style="grid-template-columns: 1fr; max-width: 400px; margin: 0 auto;">
+
+      <div class="team-card" id="team-ahmet">
+        <div class="team-avatar">
+          <i class="fas fa-user-tie"></i>
+        </div>
+        <h3 class="team-name">Ahmet Sahil</h3>
+        <p class="team-role">Kurucu & Baş Berber</p>
+        <p class="team-exp">12 Yıl Deneyim</p>
+        <div class="team-skills">
+          <span>Klasik Kesim</span>
+          <span>Ustura</span>
+          <span>Boyama</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======= YORUMLAR ======= -->
+  <section id="yorumlar" class="testimonials">
+    <div class="section-header">
+      <p class="section-eyebrow">Müşterilerimiz Ne Diyor?</p>
+      <h2 class="section-title">Müşteri Yorumları</h2>
+    </div>
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card" id="testimonial-1">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Yıllardır geliyorum, her seferinde aynı mükemmel hizmet. Ahmet usta ellerinin
+          altında çıktığında ayna karşısında kendinizi başka hissediyorsunuz."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar"><i class="fas fa-user"></i></div>
+          <div>
+            <strong>Burak D.</strong>
+            <span>Google Yorumu · 5★</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card" id="testimonial-2">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Sakal şekillendirmede gerçekten ustalar. Çevredeki en iyi berber. Randevu sistemi
+          de çok pratik, bekleme yok."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar"><i class="fas fa-user"></i></div>
+          <div>
+            <strong>Serkan M.</strong>
+            <span>Google Yorumu · 5★</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card" id="testimonial-3">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Saç boyamayı denemek için gelmiştim, sonuçtan çok memnun kaldım. Doğal görünümlü,
+          premium kalite. Kesinlikle tavsiye ederim."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar"><i class="fas fa-user"></i></div>
+          <div>
+            <strong>Emre K.</strong>
+            <span>Google Yorumu · 5★</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======= RANDEVU ======= -->
+  <section id="randevu" class="appointment">
+    <div class="section-header">
+      <p class="section-eyebrow">Online Rezervasyon</p>
+      <h2 class="section-title">Randevu Al</h2>
+      <p class="section-subtitle">Formu doldurun, en kısa sürede size dönelim.</p>
+    </div>
+    <form id="appointmentForm" novalidate onsubmit="return false;">
+      <div class="form-group">
+        <label for="name">Adınız Soyadınız</label>
+        <input type="text" id="name" name="name" placeholder="Adınızı girin" required autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label for="phone">Telefon Numarası</label>
+        <input type="tel" id="phone" name="phone" placeholder="05XX XXX XX XX" required autocomplete="tel">
+      </div>
+      <div class="form-group">
+        <label for="date">Randevu Tarihi</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+      <div class="form-group">
+        <label for="time">Saat Tercihi</label>
+        <select id="time" name="time" required>
+          <option value="">Önce tarih ve hizmet seçin</option>
+        </select>
+        <p class="form-field-hint" id="timeHint" style="font-size:.8rem;color:#999;margin-top:.4rem;display:none;">
+          <i class="fas fa-info-circle"></i> Dolu saatler otomatik gizlenir.
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="service">Hizmet Seçin</label>
+        <select id="service" name="service" required>
+          <option value="">Hizmet Seçin</option>
+          <option value="Saç Kesim & Bakım">Saç Kesim &amp; Bakım (₺150)</option>
+          <option value="Sakal Şekillendirme">Sakal Şekillendirme (₺100)</option>
+          <option value="Saç Boyama">Saç Boyama (₺250)</option>
+          <option value="Yüz Maskesi & Bakım">Yüz Maskesi &amp; Bakım (₺120)</option>
+          <option value="Fön & Şekillendirme">Fön &amp; Şekillendirme (₺80)</option>
+          <option value="Profesyonel Masaj">Profesyonel Masaj (₺90)</option>
+          <option value="Saç + Sakal Kombo">Saç + Sakal Kombo (₺220)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="notes">Notlar (İsteğe Bağlı)</label>
+        <textarea id="notes" name="notes" placeholder="Özel isteklerinizi buraya yazabilirsiniz..." rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+        <i class="fas fa-calendar-check"></i> Randevu Oluştur
+      </button>
+    </form>
+    <div class="form-success" id="formSuccess" role="alert">
+      <i class="fas fa-check-circle"></i>
+      <h3>Randevunuz Alındı!</h3>
+      <p>En kısa sürede sizi arayarak onaylayacağız. Teşekkürler!</p>
+    </div>
+  </section>
+
+  <!-- ======= İLETİŞİM ======= -->
+  <section id="iletisim" class="contact">
+    <div class="section-header">
+      <p class="section-eyebrow">Bize Ulaşın</p>
+      <h2 class="section-title">İletişim</h2>
+    </div>
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <div class="contact-item" id="contact-address">
+          <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div>
+            <strong>Adres</strong>
+            <p>Tuğrul Cad. No:123<br>Körfez / KOCAELİ</p>
+          </div>
+        </div>
+        <div class="contact-item" id="contact-phone">
+          <div class="contact-icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <strong>Telefon</strong>
+            <a href="tel:+905001234567">0500 123 45 67</a>
+          </div>
+        </div>
+        <div class="contact-item" id="contact-hours">
+          <div class="contact-icon"><i class="fas fa-clock"></i></div>
+          <div>
+            <strong>Çalışma Saatleri</strong>
+            <p>Her gün 09:00 – 20:00</p>
+          </div>
+        </div>
+        <div class="contact-item" id="contact-instagram">
+          <div class="contact-icon"><i class="fab fa-instagram"></i></div>
+          <div>
+            <strong>Instagram</strong>
+            <a href="https://instagram.com" target="_blank" rel="noopener">@sahilkuafor</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Google Maps Embed -->
+      <div class="map-container" id="map-embed">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48388.55!2d29.75!3d40.77!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cb4b1c2d5e2f1b%3A0x0!2sK%C3%B6rfez%2C%20Kocaeli!5e0!3m2!1str!2str!4v1694567890123"
+          width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="Sahil Erkek Kuaförü Haritası">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= FOOTER ======= -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="logo-icon">💈</span>
+        <span class="logo-text">Sahil Kuaför</span>
+        <p>Körfez'in en köklü erkek kuaförü.<br>Stilinizi bize bırakın.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Hızlı Linkler</h4>
+        <ul>
+          <li><a href="#anasayfa">Ana Sayfa</a></li>
+          <li><a href="#hizmetler">Hizmetler</a></li>
+          <li><a href="#hakkimda">Hakkımda</a></li>
+          <li><a href="#randevu">Randevu Al</a></li>
+          <li><a href="#iletisim">İletişim</a></li>
+        </ul>
+      </div>
+      <div class="footer-social">
+        <h4>Sosyal Medya</h4>
+        <div class="social-icons">
+          <a href="https://instagram.com/sahilkuafor" target="_blank" rel="noopener" aria-label="Instagram" id="footer-instagram"><i
+              class="fab fa-instagram"></i></a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook" id="footer-facebook"><i
+              class="fab fa-facebook"></i></a>
+          <a href="https://wa.me/905001234567" target="_blank" rel="noopener" aria-label="WhatsApp"
+            id="footer-whatsapp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="copyright-year">2024</span> Sahil Erkek Kuaförü. Tüm hakları saklıdır.</p>
+    </div>
+  </footer>
+
+  <!-- ======= FLOATING BUTONLAR ======= -->
+  <a href="https://wa.me/905001234567" class="whatsapp-float" id="whatsapp-float-btn" target="_blank" rel="noopener"
+    aria-label="WhatsApp ile iletişime geç">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <button class="scroll-top" id="scrollTopBtn" aria-label="Sayfanın başına git">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <script src="script.js"></script>
+
+  <script src="booking.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,4 @@
+.vercel
+
+mobile/service-account.json
+admin/.env.local
