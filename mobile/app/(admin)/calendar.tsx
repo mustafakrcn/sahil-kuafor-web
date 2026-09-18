@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { supabase } from '../../lib/supabase';
 import { format, parseISO } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { Clock, ChevronRight } from 'lucide-react-native';
+import { Agenda, LocaleConfig } from 'react-native-calendars';
+
+// Türkçe Takvim Ayarları
+LocaleConfig.locales['tr'] = {
+  monthNames: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+  monthNamesShort: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'],
+  dayNames: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
+  dayNamesShort: ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'],
+  today: 'Bugün'
+};
+LocaleConfig.defaultLocale = 'tr';
 
 export default function AdminCalendarScreen() {
   const router = useRouter();
-  const [appointments, setAppointments] = useState<any[]>([]);
+  const [items, setItems] = useState<any>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,15 +31,69 @@ export default function AdminCalendarScreen() {
     const { data } = await supabase
       .from('appointments')
       .select('*, customer:profiles!appointments_customer_id_fkey(full_name, phone), service:services(name), staff:staff(profile:profiles(full_name))')
-      .order('start_at', { ascending: false });
+      .order('start_at', { ascending: true }); // Takvimde saat sırasına göre göstermek daha mantıklı
 
     if (data) {
-      setAppointments(data);
+      // Agenda objesi formatına dönüştür: { '2026-09-18': [{appt1}, {appt2}] }
+      const formattedItems: any = {};
+      
+      data.forEach((appt) => {
+        const dateKey = format(parseISO(appt.start_at), 'yyyy-MM-dd');
+        if (!formattedItems[dateKey]) {
+          formattedItems[dateKey] = [];
+        }
+        formattedItems[dateKey].push(appt);
+      });
+
+      setItems(formattedItems);
     }
     setLoading(false);
   };
 
-  if (loading && appointments.length === 0) {
+  const renderItem = (appt: any) => {
+    const start = parseISO(appt.start_at);
+    let statusColor = '#888';
+    let statusText = 'Bilinmiyor';
+
+    if (appt.status === 'pending') { statusColor = '#eab308'; statusText = 'Bekliyor'; }
+    if (appt.status === 'confirmed') { statusColor = '#22c55e'; statusText = 'Onaylı'; }
+    if (appt.status === 'completed') { statusColor = '#3b82f6'; statusText = 'Tamamlandı'; }
+    if (appt.status === 'cancelled') { statusColor = '#ef4444'; statusText = 'İptal'; }
+
+    return (
+      <TouchableOpacity 
+        style={styles.itemCard} 
+        onPress={() => router.push(`/admin-booking/${appt.id}`)}
+        activeOpacity={0.8}
+      >
+        <View style={styles.cardHeader}>
+          <Text style={styles.timeText}>{format(start, 'HH:mm')}</Text>
+          <Text style={[styles.statusBadge, { color: statusColor, borderColor: statusColor + '40' }]}>
+            {statusText}
+          </Text>
+        </View>
+
+        <Text style={styles.customerName}>{appt.customer?.full_name || 'İsimsiz'}</Text>
+        <Text style={styles.serviceName}>{appt.service?.name}</Text>
+        
+        {appt.notes && (
+          <Text style={styles.notesText} numberOfLines={2}>
+            Not: {appt.notes}
+          </Text>
+        )}
+      </TouchableOpacity>
+    );
+  };
+
+  const renderEmptyDate = () => {
+    return (
+      <View style={styles.emptyDate}>
+        <Text style={styles.emptyText}>Bu gün için randevu yok</Text>
+      </View>
+    );
+  };
+
+  if (loading && Object.keys(items).length === 0) {
     return (
       <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
         <ActivityIndicator size="large" color="#c0392b" />
@@ -36,81 +101,124 @@ export default function AdminCalendarScreen() {
     );
   }
 
-  // Gruplama
-  const grouped = appointments.reduce((acc: any, appt: any) => {
-    const dateKey = format(parseISO(appt.start_at), 'yyyy-MM-dd');
-    if (!acc[dateKey]) acc[dateKey] = [];
-    acc[dateKey].push(appt);
-    return acc;
-  }, {});
-
-  const sortedDates = Object.keys(grouped).sort((a, b) => b.localeCompare(a)); // En yeni en üstte
+  const today = format(new Date(), 'yyyy-MM-dd');
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Tüm Randevular</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Randevu Takvimi</Text>
+      </View>
       
-      {sortedDates.map(date => (
-        <View key={date} style={styles.dateGroup}>
-          <Text style={styles.dateTitle}>{format(parseISO(date), 'd MMMM yyyy, EEEE', { locale: tr })}</Text>
-          {grouped[date].map((appt: any) => (
-            <AdminAppointmentCard 
-              key={appt.id} 
-              appt={appt} 
-              onPress={() => router.push(`/admin-booking/${appt.id}`)} 
-            />
-          ))}
-        </View>
-      ))}
-    </ScrollView>
-  );
-}
-
-function AdminAppointmentCard({ appt, onPress }: { appt: any, onPress: () => void }) {
-  const start = parseISO(appt.start_at);
-  let statusColor = '#888';
-  let statusText = 'Bilinmiyor';
-
-  if (appt.status === 'pending') { statusColor = '#eab308'; statusText = 'Bekliyor'; }
-  if (appt.status === 'confirmed') { statusColor = '#22c55e'; statusText = 'Onaylandı'; }
-  if (appt.status === 'completed') { statusColor = '#3b82f6'; statusText = 'Tamamlandı'; }
-  if (appt.status === 'cancelled') { statusColor = '#ef4444'; statusText = 'İptal'; }
-
-  return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-      <View style={styles.cardHeader}>
-        <View>
-          <Text style={styles.customerName}>{appt.customer?.full_name || 'İsimsiz'}</Text>
-          <Text style={styles.serviceName}>{appt.service?.name}</Text>
-        </View>
-        <Text style={[styles.statusBadge, { color: statusColor }]}>{statusText}</Text>
-      </View>
-      <View style={styles.cardBody}>
-        <View style={styles.infoRow}>
-          <Clock size={14} color="#666" />
-          <Text style={styles.infoText}>{format(start, 'HH:mm')} - {appt.staff?.profile?.full_name}</Text>
-        </View>
-      </View>
-      <ChevronRight size={20} color="#444" style={styles.chevron} />
-    </TouchableOpacity>
+      <Agenda
+        items={items}
+        loadItemsForMonth={(month) => {
+          // Dinamik yükleme şimdilik gerekmiyor, tümünü çekiyoruz
+        }}
+        selected={today}
+        renderItem={renderItem}
+        renderEmptyDate={renderEmptyDate}
+        rowHasChanged={(r1: any, r2: any) => r1.id !== r2.id}
+        showClosingKnob={true}
+        theme={{
+          backgroundColor: '#0a0a0a',
+          calendarBackground: '#111111',
+          textSectionTitleColor: '#c0392b',
+          selectedDayBackgroundColor: '#c0392b',
+          selectedDayTextColor: '#ffffff',
+          todayTextColor: '#eab308',
+          dayTextColor: '#ffffff',
+          textDisabledColor: '#333333',
+          dotColor: '#c0392b',
+          selectedDotColor: '#ffffff',
+          arrowColor: '#c0392b',
+          monthTextColor: '#ffffff',
+          indicatorColor: '#c0392b',
+          agendaDayTextColor: '#aaaaaa',
+          agendaDayNumColor: '#ffffff',
+          agendaTodayColor: '#c0392b',
+          agendaKnobColor: '#333333',
+        }}
+        style={{ flex: 1 }}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0a' },
-  content: { padding: 20, paddingTop: 60, paddingBottom: 40 },
-  title: { color: '#fff', fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
-  
-  dateGroup: { marginBottom: 24 },
-  dateTitle: { color: '#c0392b', fontSize: 16, fontWeight: 'bold', marginBottom: 12, textTransform: 'capitalize' },
-  
-  card: { backgroundColor: '#111', borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#222', position: 'relative' },
-  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12, paddingRight: 24 },
-  customerName: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
-  serviceName: { color: '#aaa', fontSize: 14, marginTop: 2 },
-  statusBadge: { fontSize: 12, fontWeight: 'bold', textTransform: 'uppercase' },
-  cardBody: { gap: 6 },
-  infoRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  infoText: { color: '#888', fontSize: 13 },
-  chevron: { position: 'absolute', right: 16, top: '50%', transform: [{ translateY: -10 }] }
+  container: { 
+    flex: 1, 
+    backgroundColor: '#0a0a0a' 
+  },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingBottom: 15,
+    backgroundColor: '#111111',
+    borderBottomWidth: 1,
+    borderBottomColor: '#222222',
+  },
+  title: { 
+    color: '#fff', 
+    fontSize: 22, 
+    fontWeight: 'bold' 
+  },
+  itemCard: {
+    backgroundColor: '#1a1a1a',
+    borderRadius: 12,
+    padding: 16,
+    marginRight: 15,
+    marginTop: 15,
+    borderWidth: 1,
+    borderColor: '#333',
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  timeText: {
+    color: '#c0392b',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  statusBadge: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  customerName: { 
+    color: '#ffffff', 
+    fontSize: 16, 
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  serviceName: { 
+    color: '#aaaaaa', 
+    fontSize: 14 
+  },
+  notesText: {
+    color: '#888888',
+    fontSize: 12,
+    fontStyle: 'italic',
+    marginTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#333',
+    paddingTop: 8,
+  },
+  emptyDate: {
+    height: 100,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 30,
+  },
+  emptyText: {
+    color: '#555555',
+    fontStyle: 'italic',
+  }
 });

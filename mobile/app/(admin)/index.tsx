@@ -81,10 +81,12 @@ export default function AdminDashboard() {
           <Text style={[styles.statValue, stats.pending > 0 && { color: '#ef4444' }]}>{stats.pending}</Text>
           <Text style={styles.statLabel}>Onay{'\n'}Bekleyen</Text>
         </LinearGradient>
-        <LinearGradient colors={['#1a1a1a', '#111']} style={styles.statCard}>
-          <Text style={styles.statValue}>{stats.totalCustomers}</Text>
-          <Text style={styles.statLabel}>Toplam{'\n'}Müşteri</Text>
-        </LinearGradient>
+        <TouchableOpacity style={{ flex: 1 }} onPress={() => router.push('/(admin)/calendar')} activeOpacity={0.8}>
+          <LinearGradient colors={['#1a1a1a', '#111']} style={[styles.statCard, { width: '100%', height: '100%' }]}>
+            <Calendar color="#c0392b" size={26} style={{ marginBottom: 6 }} />
+            <Text style={styles.statLabel}>Takvimi{'\n'}İncele</Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </View>
 
       {/* Onay Bekleyen Uyarı Bandı */}
