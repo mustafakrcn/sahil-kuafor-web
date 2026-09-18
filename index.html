@@ -265,12 +265,17 @@
     </div>
     <form id="appointmentForm" novalidate onsubmit="return false;">
       <div class="form-group">
-        <label for="name">Adınız Soyadınız</label>
-        <input type="text" id="name" name="name" placeholder="Adınızı girin" required autocomplete="name">
-      </div>
-      <div class="form-group">
-        <label for="phone">Telefon Numarası</label>
-        <input type="tel" id="phone" name="phone" placeholder="05XX XXX XX XX" required autocomplete="tel">
+        <label for="service">Hizmet Seçin</label>
+        <select id="service" name="service" required>
+          <option value="">Hizmet Seçin</option>
+          <option value="Saç Kesim & Bakım">Saç Kesim &amp; Bakım (₺150)</option>
+          <option value="Sakal Şekillendirme">Sakal Şekillendirme (₺100)</option>
+          <option value="Saç Boyama">Saç Boyama (₺250)</option>
+          <option value="Yüz Maskesi & Bakım">Yüz Maskesi &amp; Bakım (₺120)</option>
+          <option value="Fön & Şekillendirme">Fön &amp; Şekillendirme (₺80)</option>
+          <option value="Profesyonel Masaj">Profesyonel Masaj (₺90)</option>
+          <option value="Saç + Sakal Kombo">Saç + Sakal Kombo (₺220)</option>
+        </select>
       </div>
       <div class="form-group">
         <label for="date">Randevu Tarihi</label>
@@ -286,17 +291,12 @@
         </p>
       </div>
       <div class="form-group">
-        <label for="service">Hizmet Seçin</label>
-        <select id="service" name="service" required>
-          <option value="">Hizmet Seçin</option>
-          <option value="Saç Kesim & Bakım">Saç Kesim &amp; Bakım (₺150)</option>
-          <option value="Sakal Şekillendirme">Sakal Şekillendirme (₺100)</option>
-          <option value="Saç Boyama">Saç Boyama (₺250)</option>
-          <option value="Yüz Maskesi & Bakım">Yüz Maskesi &amp; Bakım (₺120)</option>
-          <option value="Fön & Şekillendirme">Fön &amp; Şekillendirme (₺80)</option>
-          <option value="Profesyonel Masaj">Profesyonel Masaj (₺90)</option>
-          <option value="Saç + Sakal Kombo">Saç + Sakal Kombo (₺220)</option>
-        </select>
+        <label for="name">Adınız Soyadınız</label>
+        <input type="text" id="name" name="name" placeholder="Adınızı girin" required autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label for="phone">Telefon Numarası</label>
+        <input type="tel" id="phone" name="phone" placeholder="05XX XXX XX XX" required autocomplete="tel">
       </div>
       <div class="form-group">
         <label for="notes">Notlar (İsteğe Bağlı)</label>

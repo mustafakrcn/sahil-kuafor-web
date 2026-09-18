@@ -123,6 +123,8 @@ export async function POST(req: NextRequest) {
 
     if (existingProfiles && existingProfiles.length > 0) {
       customerId = existingProfiles[0].id;
+      /* Mevcut profil varsa ismini güncelle */
+      await supabaseAdmin.from('profiles').update({ full_name: name }).eq('id', customerId);
     } else {
       const newId = crypto.randomUUID();
       const { data: newProfile, error: profileErr } = await supabaseAdmin
