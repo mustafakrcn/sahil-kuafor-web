@@ -77,10 +77,10 @@ export async function POST(req: NextRequest) {
       'Saç Kesim & Bakım':    45,
       'Sakal Şekillendirme':  30,
       'Saç Boyama':           90,
-      'Yüz Maskesi & Bakım':  30,
+      'Yüz Maskesi & Bakım':  45,  // DB: 45dk
       'Fön & Şekillendirme':  30,
-      'Profesyonel Masaj':    45,
-      'Saç + Sakal Kombo':    60,
+      'Profesyonel Masaj':    30,    // DB: 30dk
+      'Saç + Sakal Kombo':    75,   // DB: 75dk — düzeltildi
     };
     const durationMin = durationMap[service] ?? 60;
     const endAt = new Date(startAt.getTime() + durationMin * 60 * 1000);

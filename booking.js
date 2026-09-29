@@ -1,9 +1,10 @@
 /* ════════════════════════════════════════════════════════════
-   Sahil Kuaför — Web Sitesi Randevu Formu v4
+   Sahil Kuaför — Web Sitesi Randevu Formu v5
    ✅ UTC+3 timezone-aware
    ✅ Duration-aware overlap detection
    ✅ Geçmiş saat engeli
    ✅ Servis değişiminde saat yeniden hesaplama
+   ✅ DB'den dinamik hizmet listesi (is_active kontrolü)
    ════════════════════════════════════════════════════════════ */
 
 /* API URL'si Vercel rewrites (vercel.json) üzerinden yönlendiriliyor (CORS bypass) */
@@ -13,15 +14,15 @@ const SUPABASE_URL = 'https://xdbsuikweiqarwaxrmwf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkYnN1aWt3ZWlxYXJ3YXhybXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwNjYxMTAsImV4cCI6MjEwNDY0MjExMH0.J6-MZ-gYXxO2xAhA8GBs63t1-kEM73RjRyesCMYiotA';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* Hizmet süreleri (dakika) — sunucu ile aynı olmalı */
-const DURATION_MAP = {
+/* Hizmet süreleri (dakika) — DB'den dinamik doldurulur, başlangıç için fallback */
+let DURATION_MAP = {
   'Saç Kesim & Bakım': 45,
   'Sakal Şekillendirme': 30,
   'Saç Boyama': 90,
-  'Yüz Maskesi & Bakım': 30,
+  'Yüz Maskesi & Bakım': 45,
   'Fön & Şekillendirme': 30,
-  'Profesyonel Masaj': 45,
-  'Saç + Sakal Kombo': 60,
+  'Profesyonel Masaj': 30,
+  'Saç + Sakal Kombo': 75,
 };
 
 /* Tüm olası saat dilimleri */
@@ -47,6 +48,45 @@ function setMinDate() {
   dateInput.min = `${yyyy}-${mm}-${dd}`;
 }
 setMinDate();
+
+/* ──── Hizmetleri DB'den çek ve formu doldur ────
+   is_active=true olanları sort_order'a göre sıralar.
+   DURATION_MAP'i de DB verileriyle günceller. */
+async function loadServicesFromDB() {
+  try {
+    const { data: services, error } = await supabaseClient
+      .from('services')
+      .select('id, name, price, duration_min, is_active, sort_order')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
+
+    if (error || !services || services.length === 0) {
+      console.warn('[loadServices] DB\'den hizmet yüklenemedi, varsayılan liste kullanılıyor.');
+      return;
+    }
+
+    /* DURATION_MAP'i DB verileriyle güncelle */
+    services.forEach(svc => {
+      DURATION_MAP[svc.name] = svc.duration_min;
+    });
+
+    /* Select'i temizle ve DB'den gelen aktif hizmetlerle doldur */
+    serviceSelect.innerHTML = '<option value="">Hizmet Seçin</option>';
+    services.forEach(svc => {
+      const opt = document.createElement('option');
+      opt.value = svc.name;
+      opt.textContent = `${svc.name} (₺${svc.price})`;
+      serviceSelect.appendChild(opt);
+    });
+
+    console.log(`[loadServices] ✅ ${services.length} aktif hizmet yüklendi.`);
+  } catch (err) {
+    console.warn('[loadServices] Hata:', err);
+  }
+}
+
+/* Sayfa yüklenince hizmetleri DB'den çek */
+loadServicesFromDB();
 
 /* ──── Slot listesini yeniden oluştur ──── */
 function rebuildTimeSelect(slots) {
