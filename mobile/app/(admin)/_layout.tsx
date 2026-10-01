@@ -47,6 +47,13 @@ export default function AdminLayout() {
           title: 'Ayarlar',
         }}
       />
+      <Stack.Screen
+        name="calendar"
+        options={{
+          title: 'Randevu Takvimi',
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

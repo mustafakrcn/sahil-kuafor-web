@@ -23,6 +23,9 @@
       "permissions": [
         "android.permission.RECEIVE_BOOT_COMPLETED",
         "android.permission.VIBRATE",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.VIBRATE",
         "android.permission.POST_NOTIFICATIONS"
       ],
       "package": "com.sahilkuafor.app",
@@ -50,6 +53,12 @@
         "projectId": "44b84558-1d82-44e1-950a-a94842db45a2"
       }
     },
-    "owner": "mustafakaracin190341"
+    "owner": "mustafakaracin190341",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/44b84558-1d82-44e1-950a-a94842db45a2"
+    }
   }
 }

@@ -455,197 +455,491 @@ nav {
 }
 
 /* ==========================================
-   HİZMETLER
+   HİZMETLER — FLIP CARD LAYOUT
    ========================================== */
 .services {
-  padding: 6rem 2rem;
+  padding: 1.5rem 2rem;
   background: var(--color-bg-alt);
-  max-width: 100%;
 }
 
-.services>.section-header,
-.services>.services-grid {
+.services > .section-header {
   max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 1.5rem;
 }
 
-.services-grid {
+/* Grid — 3 sütun, tam ekrana yayılır */
+.flip-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem;
   max-width: var(--max-width);
   margin: 0 auto;
 }
 
-.service-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-lg);
-  padding: 2rem;
-  transition: var(--transition);
-  cursor: default;
+/* ── Flip Card Wrapper ── */
+.flip-card {
+  aspect-ratio: 4 / 3;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+
+.flip-inner {
   position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.flip-card:hover .flip-inner {
+  transform: rotateY(180deg);
+}
+
+/* Ortak ön/arka yüz ayarları */
+.flip-front,
+.flip-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem 1rem;
   overflow: hidden;
 }
 
-.service-card::before {
+/* ── ÖN YÜZ ── */
+.flip-front {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  gap: 1rem;
+}
+
+/* Süzülen glow efekti */
+.flip-front-glow {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(192,57,43,0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.65s ease, opacity 0.65s ease;
+  pointer-events: none;
+}
+
+.flip-card:hover .flip-front-glow {
+  opacity: 0;
+}
+
+.flip-icon {
+  width: 62px;
+  height: 62px;
+  background: rgba(192, 57, 43, 0.12);
+  border: 1px solid rgba(192, 57, 43, 0.3);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--color-primary-light);
+  position: relative;
+  z-index: 1;
+  transition: var(--transition);
+}
+
+/* İkona hafif pulse animasyonu */
+.flip-card:not(:hover) .flip-icon {
+  animation: icon-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes icon-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(192,57,43,0.0); }
+  50%       { box-shadow: 0 0 0 8px rgba(192,57,43,0.12); }
+}
+
+.flip-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-white);
+  text-align: center;
+  line-height: 1.25;
+  position: relative;
+  z-index: 1;
+}
+
+.flip-title span {
+  color: var(--color-primary-light);
+}
+
+.flip-hint {
+  position: absolute;
+  bottom: 1rem;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+}
+
+.flip-card:hover .flip-hint {
+  color: rgba(255,255,255,0.5);
+}
+
+.flip-hint i {
+  font-size: 0.65rem;
+  animation: hint-spin 3s linear infinite;
+}
+
+@keyframes hint-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── ARKA YÜZ ── */
+.flip-back {
+  background: linear-gradient(135deg, #1a0a08 0%, #1c1414 50%, #120808 100%);
+  border: 1px solid rgba(192, 57, 43, 0.35);
+  transform: rotateY(180deg);
+  gap: 0.6rem;
+  justify-content: space-between;
+  padding: 1rem 1.1rem;
+}
+
+/* Köşe çizgisi süsleme */
+.flip-back::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
-  transform: scaleX(0);
-  transition: var(--transition);
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  border-radius: 20px 20px 0 0;
 }
 
-.service-card:hover {
-  border-color: rgba(192, 57, 43, 0.4);
-  background: var(--color-bg-card-hover);
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
+.flip-back::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top center, rgba(192,57,43,0.08) 0%, transparent 60%);
+  border-radius: 20px;
+  pointer-events: none;
 }
 
-.service-card:hover::before {
-  transform: scaleX(1);
+.flip-back-icon {
+  font-size: 1.4rem;
+  color: var(--color-primary);
+  opacity: 0.6;
+  position: relative;
+  z-index: 1;
 }
 
-.service-icon {
-  width: 56px;
-  height: 56px;
-  background: rgba(192, 57, 43, 0.15);
-  border: 1px solid rgba(192, 57, 43, 0.3);
-  border-radius: 14px;
+.flip-desc {
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.78);
+  text-align: center;
+  line-height: 1.55;
+  position: relative;
+  z-index: 1;
+  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  color: var(--color-primary-light);
-  margin-bottom: 1.25rem;
-  transition: var(--transition);
 }
 
-.service-card:hover .service-icon {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--color-white);
-  transform: scale(1.05);
-}
-
-.service-card h3 {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--color-white);
-  margin-bottom: 0.6rem;
-}
-
-.service-card p {
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-  line-height: 1.65;
-  margin-bottom: 1.25rem;
-}
-
-.service-price {
+.flip-meta {
   display: flex;
-  align-items: baseline;
-  gap: 0.3rem;
+  gap: 1.2rem;
+  position: relative;
+  z-index: 1;
 }
 
-.price {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
+.flip-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(192,57,43,0.1);
+  border: 1px solid rgba(192,57,43,0.2);
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+}
+
+.flip-meta-item i {
   color: var(--color-primary-light);
+  font-size: 0.9rem;
 }
 
-.price-note {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
+.flip-meta-item span {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--color-white);
 }
+
+.flip-cta {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 800;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+  transition: var(--transition);
+  box-shadow: 0 4px 16px rgba(192,57,43,0.35);
+}
+
+.flip-cta:hover {
+  box-shadow: 0 6px 24px rgba(192,57,43,0.55);
+  transform: translateY(-1px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .flip-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .flip-grid {
+    grid-template-columns: 1fr;
+  }
+  .flip-card {
+    aspect-ratio: unset;
+    min-height: 260px;
+  }
+}
+
 
 /* ==========================================
-   EKİP
+   HAKKIMDA — 2 SÜTUNLU LAYOUT
    ========================================== */
 .team {
   padding: 6rem 2rem;
   background: var(--color-bg);
 }
 
-.team-grid {
+/* Ana iki sütunlu düzen */
+.about-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1.1fr 1.2fr;
+  gap: 3rem;
+  align-items: center;
   max-width: var(--max-width);
   margin: 0 auto;
 }
 
-.team-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-lg);
-  padding: 2.5rem 2rem;
-  text-align: center;
-  transition: var(--transition);
+/* ── Fotoğraf Sütunu ── */
+.about-photo-col {
+  display: flex;
+  justify-content: center;
 }
 
-.team-card:hover {
-  border-color: rgba(192, 57, 43, 0.4);
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
+.about-photo-wrap {
+  position: relative;
+  width: 560px;
+  max-width: 100%;
 }
 
-.team-avatar {
-  width: 90px;
-  height: 90px;
-  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary-light));
+/* Dönen parlak halka */
+.about-photo-ring {
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--color-primary) 0%,
+    transparent 30%,
+    transparent 70%,
+    var(--color-primary-light) 100%
+  );
+  opacity: 0.35;
+  filter: blur(10px);
+  animation: ring-spin 6s linear infinite;
+}
+
+@keyframes ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+.about-photo {
+  width: 100%;
+  border-radius: 24px;
+  display: block;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.65),
+              0 0 40px rgba(192, 57, 43, 0.18);
+}
+
+/* Deneyim rozeti */
+.about-exp-badge {
+  position: absolute;
+  bottom: -16px;
+  right: -16px;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  border: 2px solid rgba(255, 255, 255, 0.12);
   border-radius: 50%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 2.2rem;
-  color: var(--color-white);
-  margin: 0 auto 1.25rem;
-  box-shadow: var(--shadow-glow);
+  z-index: 2;
+  box-shadow: 0 8px 28px rgba(192, 57, 43, 0.55);
+  text-align: center;
 }
 
-.team-name {
+.aeb-num {
+  font-family: var(--font-display);
   font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.aeb-label {
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+/* ── Bilgi Sütunu ── */
+.about-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-primary-light);
+  margin-bottom: 0.6rem;
+}
+
+.about-name {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
   font-weight: 700;
   color: var(--color-white);
-  margin-bottom: 0.3rem;
-}
-
-.team-role {
-  font-size: 0.85rem;
-  color: var(--color-primary-light);
-  font-weight: 500;
-  margin-bottom: 0.3rem;
-}
-
-.team-exp {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
+  line-height: 1.15;
   margin-bottom: 1.25rem;
 }
 
-.team-skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  justify-content: center;
+.about-bio {
+  font-size: 0.97rem;
+  color: var(--color-text-muted);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  border-left: 3px solid var(--color-primary);
+  padding-left: 1rem;
 }
 
-.team-skills span {
-  font-size: 0.75rem;
-  background: rgba(192, 57, 43, 0.15);
-  border: 1px solid rgba(192, 57, 43, 0.25);
-  color: var(--color-primary-light);
-  padding: 0.25rem 0.7rem;
-  border-radius: 50px;
+/* İstatistik satırı */
+.about-stats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
 }
+
+.about-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.as-num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-white);
+  line-height: 1;
+}
+
+.as-label {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.4px;
+}
+
+.about-stat-div {
+  width: 1px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Uzmanlık etiketleri */
+.about-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.about-skills span {
+  font-size: 0.78rem;
+  background: rgba(192, 57, 43, 0.12);
+  border: 1px solid rgba(192, 57, 43, 0.28);
+  color: var(--color-primary-light);
+  padding: 0.3rem 0.85rem;
+  border-radius: 50px;
+  transition: var(--transition);
+}
+
+.about-skills span:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.about-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .about-layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    text-align: center;
+  }
+  .about-photo-wrap {
+    width: 240px;
+    margin: 0 auto;
+  }
+  .about-bio {
+    border-left: none;
+    padding-left: 0;
+    border-top: 3px solid var(--color-primary);
+    padding-top: 1rem;
+  }
+  .about-stats {
+    justify-content: center;
+  }
+  .about-skills {
+    justify-content: center;
+  }
+  .about-cta {
+    margin: 0 auto;
+  }
+}
+
 
 /* ==========================================
    YORUMLAR
