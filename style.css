@@ -356,6 +356,7 @@ nav {
   text-align: center;
   padding: 0 1.5rem;
   max-width: 1000px;
+  margin-top: 8vh;
 }
 
 .hero-eyebrow {
@@ -371,6 +372,12 @@ nav {
   border-radius: 50px;
   margin-bottom: 1.5rem;
   animation: fadeInDown 0.8s ease-out both;
+}
+
+@media (max-width: 768px) {
+  .hero-eyebrow {
+    display: none !important;
+  }
 }
 
 .hero-title {
