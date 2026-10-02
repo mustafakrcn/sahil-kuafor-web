@@ -385,7 +385,6 @@ nav {
 
 .hero-accent {
   color: var(--color-primary-light);
-  display: block;
 }
 
 .hero-subtitle {
@@ -1580,4 +1579,114 @@ textarea {
   .stat-divider {
     height: 30px;
   }
+}
+/* ==========================================
+   GREETING & HERO BADGE
+   ========================================== */
+
+/* Hero Badge */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1.5rem 0.5rem 0.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.hero-badge:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px);
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.badge-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--color-primary);
+}
+
+.badge-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.badge-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.badge-title {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.badge-subtitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-white);
+}
+
+.badge-icon {
+  color: var(--color-primary);
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.hero-badge:hover .badge-icon {
+  transform: translateX(4px);
+}
+
+/* Personal Greeting Strip */
+.personal-greeting {
+  padding: 6rem 2rem;
+  background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-card));
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.greeting-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.greeting-quote-icon {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  opacity: 0.3;
+  margin-bottom: 1.5rem;
+}
+
+.greeting-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.6;
+  color: var(--color-white);
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.greeting-signature {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  color: var(--color-primary);
+  transform: rotate(-3deg);
+  display: inline-block;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
