@@ -355,7 +355,7 @@ nav {
   z-index: 1;
   text-align: center;
   padding: 0 1.5rem;
-  max-width: 750px;
+  max-width: 1000px;
 }
 
 .hero-eyebrow {
@@ -375,12 +375,13 @@ nav {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(1.4rem, 6vw, 5rem);
   font-weight: 900;
   line-height: 1.1;
   color: var(--color-white);
   margin-bottom: 1.25rem;
   animation: fadeInUp 0.9s ease-out 0.2s both;
+  white-space: nowrap;
 }
 
 .hero-accent {
