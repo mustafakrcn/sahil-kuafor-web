@@ -57,6 +57,14 @@ export default async function DashboardPage() {
     .select('service:services(price)').eq('status', 'completed')
     .gte('start_at', todayStart).lte('start_at', todayEnd);
 
+  const { data: upcomingWeekAppts } = await supabase.from('appointments')
+    .select('*, service:services(name, price), staff:staff(profile:profiles(full_name))')
+    .gte('start_at', new Date().toISOString())
+    .lte('start_at', weekEnd)
+    .eq('status', 'confirmed')
+    .order('start_at')
+    .limit(5);
+
   // Gelir hesaplama
   const todayRevenue = (todayCompletedAppts ?? []).reduce((s: number, a: any) => s + (a.service?.price ?? 0), 0);
   const weekRevenue  = (weekAppts ?? []).reduce((s: number, a: any) => s + (a.service?.price ?? 0), 0);
@@ -294,7 +302,41 @@ export default async function DashboardPage() {
             </div>
           </div>
 
+          {/* Haftalık Gelecek Randevular (Hatırlatma) */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">🔔 Gelecek Onaylı Randevular</p>
+              <a href="/appointments" className="text-xs text-red-500 hover:text-red-400 font-semibold">Tümü →</a>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-lg shadow-black/20">
+              {!upcomingWeekAppts || upcomingWeekAppts.length === 0 ? (
+                <div className="p-6 text-center">
+                  <Calendar size={32} className="text-gray-700 mx-auto mb-3" />
+                  <p className="text-gray-500 text-sm font-medium">Bu hafta için yaklaşan onaylı randevu yok.</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-800/80">
+                  {upcomingWeekAppts.map((appt: any) => (
+                    <div key={appt.id} className="p-4 hover:bg-gray-800/60 transition-colors flex items-center gap-4 group cursor-default">
+                      <div className="text-center min-w-[50px] bg-gray-950 rounded-lg py-1.5 border border-gray-800 group-hover:border-gray-700 transition-colors">
+                        <p className="text-gray-400 text-[10px] font-bold uppercase">{format(new Date(appt.start_at), 'd MMM', { locale: tr })}</p>
+                        <p className="text-white text-sm font-black">{format(new Date(appt.start_at), 'HH:mm')}</p>
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white text-sm font-bold truncate">{appt.customer_name ?? 'Misafir'}</p>
+                        <p className="text-gray-400 text-xs truncate mt-0.5">{appt.service?.name ?? '—'}</p>
+                      </div>
 
+                      <div className="bg-emerald-500/10 p-1.5 rounded-full border border-emerald-500/20">
+                        <CheckCircle size={14} className="text-emerald-500" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
 
         </div>
       </div>
