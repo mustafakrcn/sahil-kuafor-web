@@ -87,7 +87,7 @@ export default async function DashboardPage() {
       {/* Onay Bekleyen Uyarı */}
       {(pendingCount ?? 0) > 0 && (
         <a
-          href="/dashboard/appointments"
+          href="/appointments"
           className="flex items-center gap-3 bg-red-500/10 border border-red-500/20 rounded-2xl px-5 py-4 hover:bg-red-500/15 transition-all group"
         >
           <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse flex-shrink-0" />
@@ -110,7 +110,7 @@ export default async function DashboardPage() {
               label: 'Bugünkü Randevu', value: todayAppts?.length ?? 0,
               sub: `${confirmedToday ?? 0} onaylı`,
               icon: Calendar, color: 'text-indigo-400', bg: 'bg-indigo-500/10',
-              border: 'border-indigo-500/10', href: '/dashboard/appointments',
+              border: 'border-indigo-500/10', href: '/appointments',
             },
             {
               label: 'Onay Bekleyen', value: pendingCount ?? 0,
@@ -119,19 +119,19 @@ export default async function DashboardPage() {
               color: (pendingCount ?? 0) > 0 ? 'text-amber-400' : 'text-green-400',
               bg: (pendingCount ?? 0) > 0 ? 'bg-amber-500/10' : 'bg-green-500/10',
               border: (pendingCount ?? 0) > 0 ? 'border-amber-500/20' : 'border-green-500/10',
-              href: '/dashboard/appointments',
+              href: '/appointments',
             },
             {
               label: 'Toplam Müşteri', value: totalCustomers ?? 0,
               sub: 'kayıtlı müşteri',
               icon: Users, color: 'text-emerald-400', bg: 'bg-emerald-500/10',
-              border: 'border-emerald-500/10', href: '/dashboard/customers',
+              border: 'border-emerald-500/10', href: '/customers',
             },
             {
               label: 'Bu Hafta Toplam', value: weekTotal ?? 0,
               sub: 'randevu',
               icon: BarChart2, color: 'text-purple-400', bg: 'bg-purple-500/10',
-              border: 'border-purple-500/10', href: '/dashboard/appointments',
+              border: 'border-purple-500/10', href: '/appointments',
             },
           ].map(({ label, value, sub, icon: Icon, color, bg, border, href }) => (
             <a
@@ -203,7 +203,7 @@ export default async function DashboardPage() {
               <h2 className="font-bold text-white">Günün Programı</h2>
               <div className="flex items-center gap-3">
                 <span className="text-sm text-gray-500">{todayAppts?.length ?? 0} randevu</span>
-                <a href="/dashboard/appointments" className="text-red-500 text-sm font-semibold hover:text-red-400 transition-colors">
+                <a href="/appointments" className="text-red-500 text-sm font-semibold hover:text-red-400 transition-colors">
                   Tümünü Gör →
                 </a>
               </div>
@@ -271,10 +271,10 @@ export default async function DashboardPage() {
             <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-4">⚡ Hızlı Erişim</p>
             <div className="space-y-3">
               {[
-                { href: '/dashboard/appointments', icon: Calendar,  label: 'Randevular',       sub: `${pendingCount ?? 0} bekleyen`,   color: 'text-red-400',    bg: 'bg-red-500/10' },
-                { href: '/dashboard/customers',    icon: Users,     label: 'Müşteriler',       sub: `${totalCustomers ?? 0} kayıtlı`, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-                { href: '/dashboard/services',     icon: Scissors,  label: 'Hizmetler',        sub: 'Fiyat & içerik',                 color: 'text-blue-400',   bg: 'bg-blue-500/10' },
-                { href: '/dashboard/staff',        icon: Star,      label: 'Personel',         sub: 'Ekibinizi yönetin',              color: 'text-purple-400', bg: 'bg-purple-500/10' },
+                { href: '/appointments', icon: Calendar,  label: 'Randevular',       sub: `${pendingCount ?? 0} bekleyen`,   color: 'text-red-400',    bg: 'bg-red-500/10' },
+                { href: '/customers',    icon: Users,     label: 'Müşteriler',       sub: `${totalCustomers ?? 0} kayıtlı`, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+                { href: '/services',     icon: Scissors,  label: 'Hizmetler',        sub: 'Fiyat & içerik',                 color: 'text-blue-400',   bg: 'bg-blue-500/10' },
+                { href: '/staff',        icon: Star,      label: 'Personel',         sub: 'Ekibinizi yönetin',              color: 'text-purple-400', bg: 'bg-purple-500/10' },
               ].map(({ href, icon: Icon, label, sub, color, bg }) => (
                 <a
                   key={label}
