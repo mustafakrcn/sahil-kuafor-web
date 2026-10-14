@@ -1,10 +1,12 @@
 /* ════════════════════════════════════════════════════════════
-   Sahil Kuaför — Web Sitesi Randevu Formu v5
+   Sahil Kuaför — Web Sitesi Randevu Formu v6
    ✅ UTC+3 timezone-aware
    ✅ Duration-aware overlap detection
    ✅ Geçmiş saat engeli
    ✅ Servis değişiminde saat yeniden hesaplama
    ✅ DB'den dinamik hizmet listesi (is_active kontrolü)
+   ✅ Randevu alınmış (dolu) saatlerin otomatik gizlenmesi
+   ✅ Supabase Realtime ile anlık saat güncellemesi
    ════════════════════════════════════════════════════════════ */
 
 /* API URL'si Vercel rewrites (vercel.json) üzerinden yönlendiriliyor (CORS bypass) */
@@ -88,39 +90,36 @@ async function loadServicesFromDB() {
 /* Sayfa yüklenince hizmetleri DB'den çek */
 loadServicesFromDB();
 
-/* ──── Slot listesini yeniden oluştur ──── */
+/* ──── Slot listesini yeniden oluştur ────
+   Dolu, geçmiş veya geçersiz saatler otomatik gizlenir,
+   kullanıcılar bu saatleri hiçbir şekilde göremez ve seçemez. */
 function rebuildTimeSelect(slots) {
   /* Mevcut seçili değeri koru */
   const prevVal = timeSelect.value;
 
-  /* Tüm seçenekleri temizle, sadece placeholder bırak */
-  timeSelect.innerHTML = '<option value="">Saat Seçin</option>';
+  /* Sadece müsait olan saatleri filtrele (dolu, geçmiş veya uygun olmayan saatler kullanıcıya hiç gösterilmez) */
+  const availableSlots = (slots || []).filter(s => s.available);
 
-  if (!slots || slots.length === 0) {
-    const opt = document.createElement('option');
-    opt.value = '';
-    opt.textContent = 'Bu gün için müsait saat yok';
-    opt.disabled = true;
-    timeSelect.appendChild(opt);
+  if (availableSlots.length === 0) {
+    timeSelect.innerHTML = '<option value="" disabled selected>Bu gün için müsait saat kalmadı</option>';
     return;
   }
 
-  slots.forEach(({ slot, available, reason }) => {
+  /* Tüm seçenekleri temizle ve varsayılan placeholder ekle */
+  timeSelect.innerHTML = '<option value="">Saat Seçin</option>';
+
+  availableSlots.forEach(({ slot }) => {
     const opt = document.createElement('option');
     opt.value = slot;
-    if (available) {
-      opt.textContent = slot;
-    } else {
-      opt.textContent = `${slot} — ${reason}`;
-      opt.disabled = true;
-      opt.style.color = '#6b7280';
-    }
+    opt.textContent = slot;
     timeSelect.appendChild(opt);
   });
 
-  /* Önceki seçim hâlâ geçerliyse geri yükle */
-  if (prevVal && slots.find(s => s.slot === prevVal && s.available)) {
+  /* Önceki seçim hâlâ müsaitse geri yükle, aksi halde sıfırla */
+  if (prevVal && availableSlots.some(s => s.slot === prevVal)) {
     timeSelect.value = prevVal;
+  } else {
+    timeSelect.value = '';
   }
 }
 
@@ -218,6 +217,24 @@ if (serviceSelect) {
   serviceSelect.addEventListener('change', () => {
     if (dateInput.value) loadAvailableSlots();
   });
+}
+
+/* ──── Gerçek Zamanlı (Realtime) Güncelleme ────
+   Yeni bir randevu alındığında veya durum değiştiğinde,
+   seçili günün müsait saatleri anında yeniden hesaplanır ve
+   dolu saat kullanıcıya hissettirilmeden otomatik olarak listeden kaldırılır. */
+try {
+  supabaseClient
+    .channel('public:appointments')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'appointments' }, () => {
+      if (dateInput && dateInput.value && serviceSelect && serviceSelect.value) {
+        console.log('[Realtime] Randevu tablosu güncellendi, saatler anında yenileniyor...');
+        loadAvailableSlots();
+      }
+    })
+    .subscribe();
+} catch (rtErr) {
+  console.warn('[Realtime] Abonelik başlatılamadı:', rtErr);
 }
 
 /* ──── Submit handler ──── */
